@@ -6,101 +6,79 @@
     android:focusable="true"
     android:focusableInTouchMode="true">
 
-    <!-- <ImageView
-         android:id="@+id/back"
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:layout_alignParentStart="true"
-         android:layout_alignParentTop="true"
-         android:contentDescription="@null"
-         android:padding="10dp"
-         android:src="@drawable/ic_arrow_back" />
-
-     <TextView
-         android:id="@+id/tv_header"
-         android:layout_width="match_parent"
-         android:layout_height="wrap_content"
-         android:layout_alignTop="@+id/back"
-         android:layout_toEndOf="@id/back"
-         android:padding="8dp"
-         android:text="@string/passenger_information"
-         android:textColor="@color/black"
-         android:textSize="20sp" />
- -->
-    <LinearLayout
+    <TextView
+        android:id="@+id/tv_name_label"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:orientation="vertical">
+        android:layout_alignParentTop="true"
+        android:background="@color/lightGrey"
+        android:padding="15dp"
+        android:text="@string/name"
+        android:textColor="#123"
+        android:textSize="18sp"
+        android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/tv_name_label"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/lightGrey"
-            android:padding="15dp"
-            android:text="@string/name"
-            android:textColor="#123"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_name_label"
+        android:paddingVertical="15dp"
+        android:paddingStart="12dp"
+        android:paddingEnd="15dp"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        tools:text="Sathish Kumar" />
 
-        <TextView
-            android:id="@+id/tv_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingHorizontal="12dp"
-            android:paddingVertical="15dp"
-            android:textColor="@color/black"
-            android:textSize="16sp"
-            tools:text="Sathish Kumar" />
+    <TextView
+        android:id="@+id/tv_id_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_name"
+        android:background="@color/lightGrey"
+        android:padding="15dp"
+        android:text="@string/id"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/tv_id_label"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/lightGrey"
-            android:padding="15dp"
-            android:text="@string/id"
-            android:textColor="@color/black"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+    <TextView
+        android:id="@+id/tv_id"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_id_label"
+        android:padding="15dp"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        tools:text="12245 455 " />
 
-        <TextView
-            android:id="@+id/tv_id"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="15dp"
-            android:textColor="@color/black"
-            android:textSize="16sp"
-            tools:text="12245 455 " />
+    <TextView
+        android:id="@+id/tv_phone_number"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_id"
+        android:background="@color/lightGrey"
+        android:padding="15dp"
+        android:text="@string/phoneNumber"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/tv_phone_number"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/lightGrey"
-            android:padding="15dp"
-            android:text="@string/phoneNumber"
-            android:textColor="@color/black"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-
-        <EditText
-            android:id="@+id/edit_ph_number"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:autofillHints="@string/phoneNumber"
-            android:backgroundTint="@color/transparent"
-            android:focusedByDefault="false"
-            android:hint="@string/enter_ph_no"
-            android:inputType="number"
-            android:maxLength="10"
-            android:maxLines="1"
-            android:padding="15dp"
-            android:textCursorDrawable="@drawable/color_cursor"
-            android:textSize="16sp"
-            tools:ignore="LabelFor" />
-    </LinearLayout>
+    <EditText
+        android:id="@+id/edit_ph_number"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_phone_number"
+        android:autofillHints="@string/phoneNumber"
+        android:backgroundTint="@color/transparent"
+        android:hint="@string/enter_ph_no"
+        android:inputType="number"
+        android:maxLength="10"
+        android:maxLines="1"
+        android:padding="15dp"
+        android:textCursorDrawable="@drawable/color_cursor"
+        android:textSize="16sp"
+        tools:ignore="LabelFor" />
 
     <Button
         android:id="@+id/btnSaveAndContinue"
