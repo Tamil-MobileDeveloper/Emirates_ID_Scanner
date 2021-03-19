@@ -113,26 +113,26 @@ class MainActivity : AppCompatActivity() {
                 if (items.size() <= 0) {
                     return
                 } else {
-                    runOnUiThread {
-                        val stringBuilder = StringBuilder()
-                        for (i in 0 until items.size()) {
-                            val item = items.valueAt(i).value
-                            stringBuilder.append(item)
-                            stringBuilder.append("\n")
+                    val stringBuilder = StringBuilder()
+                    for (i in 0 until items.size()) {
+                        val item = items.valueAt(i).value
+                        stringBuilder.append(item)
+                        stringBuilder.append("\n")
 
-                            if (Pattern.matches(
-                                            "([0-9]{3})*-([0-9]{4})*-([0-9]{7})*-([0-9])",
-                                            item
-                                    )
-                            ) {
-                                hasValidID = true
-                                idNumber = item
-                                println("idNumber $idNumber")
-                            }
-                            if (item.contains("Name", true))
-                                name = item
+                        if (Pattern.matches(
+                                        "([0-9]{3})*-([0-9]{4})*-([0-9]{7})*-([0-9])",
+                                        item
+                                )
+                        ) {
+                            hasValidID = true
+                            idNumber = item
+                            println("idNumber $idNumber")
                         }
-                        if (hasValidID) {
+                        if (item.contains("Name", true))
+                            name = item
+                    }
+                    if (hasValidID) {
+                        runOnUiThread {
                             mCameraSource.stop()
                             tv_result.visibility = View.VISIBLE
                             ivRetry.visibility = View.VISIBLE
@@ -140,25 +140,6 @@ class MainActivity : AppCompatActivity() {
                             tv_result.text = "ID: $idNumber \n $name"
                         }
                     }
-                    /*if (items.size() > 3) {
-                        if (checkValidNumberRead(StringBuilder().append(items.valueAt(3).value).toString())) {
-                            runOnUiThread {
-                                tv_result.visibility = View.VISIBLE
-                                ivRetry.visibility = View.VISIBLE
-                                ivDone.visibility = View.VISIBLE
-                                tv_result.post {
-                                    val stringBuilder = StringBuilder()
-                                    for (i in 0 until items.size()) {
-                                        val item = items.valueAt(i)
-                                        stringBuilder.append(item.value)
-                                        stringBuilder.append("\n")
-                                    }
-                                    tv_result.text = stringBuilder.toString()
-                                    mCameraSource.stop()
-                                }
-                            }
-                        } else println("Hiii Error 4: invalid ID $items")
-                    } else println("Hiii Error 5: length should be greater than 3 ${items.size()}")*/
                 }
             }
         })
