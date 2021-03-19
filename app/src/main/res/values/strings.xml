@@ -1,4 +1,12 @@
 <resources>
     <string name="app_name">Emirates ID Reader</string>
     <string name="title_activity_maps">Map</string>
+    <string name="name">Name</string>
+    <string name="id">ID Number</string>
+    <string name="phoneNumber">Phone Number</string>
+    <string name="add_id_card">Add ID Card.</string>
+    <string name="position_your_id_card_within_the_frame">Position your ID Card within the frame.</string>
+    <string name="save_and_continue">save &amp; continue</string>
+    <string name="passenger_information">Passenger Information</string>
+    <string name="enter_ph_no">Enter Passenger Phone Number</string>
 </resources>

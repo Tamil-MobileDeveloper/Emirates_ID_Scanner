@@ -2,8 +2,10 @@ package me.shuza.textrecognization
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.os.Handler
 import android.support.v4.app.ActivityCompat
 import android.support.v7.app.AppCompatActivity
 import android.view.SurfaceHolder
@@ -48,18 +50,18 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        ivRetry.setOnClickListener {
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                requestForPermission()
-            } else {
-                tv_result.visibility = View.GONE
-                ivRetry.visibility = View.GONE
-                hasValidID = false
-                idNumber = ""
-                name = ""
-                mCameraSource.start(surface_camera_preview.holder)
-            }
-        }
+//        ivRetry.setOnClickListener {
+//            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+//                requestForPermission()
+//            } else {
+//                tv_result.visibility = View.GONE
+//                ivRetry.visibility = View.GONE
+//                hasValidID = false
+//                idNumber = ""
+//                name = ""
+//                mCameraSource.start(surface_camera_preview.holder)
+//            }
+//        }
     }
 
     private fun startCameraSource() {
@@ -134,10 +136,27 @@ class MainActivity : AppCompatActivity() {
                     if (hasValidID) {
                         runOnUiThread {
                             mCameraSource.stop()
-                            tv_result.visibility = View.VISIBLE
-                            ivRetry.visibility = View.VISIBLE
-                            ivDone.visibility = View.VISIBLE
-                            tv_result.text = "ID: $idNumber \n $name"
+//                            tv_result.visibility = View.VISIBLE
+//                            ivRetry.visibility = View.VISIBLE
+//                            ivDone.visibility = View.VISIBLE
+//                            tv_result.text = "ID: $idNumber \n $name"
+                            progress.visibility = View.VISIBLE
+                            Handler().postDelayed(Runnable {
+                                progress.visibility = View.GONE
+                                startActivity(
+                                        Intent(
+                                                this@MainActivity,
+                                                PassengerInformationActivity::class.java
+                                        ).apply {
+                                            putExtras(Bundle().apply {
+                                                putString(ARG_ID_NUMBER, idNumber)
+                                                putString(ARG_NAME, name)
+                                            })
+                                        }
+                                )
+                            }, 2000)
+
+
                         }
                     }
                 }
