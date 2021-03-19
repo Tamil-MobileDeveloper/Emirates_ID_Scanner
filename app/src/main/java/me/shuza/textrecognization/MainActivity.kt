@@ -3,18 +3,19 @@ package me.shuza.textrecognization
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
+import android.support.v7.app.AppCompatActivity
 import android.view.SurfaceHolder
+import android.view.View
 import com.google.android.gms.vision.CameraSource
 import com.google.android.gms.vision.Detector
-import com.google.android.gms.vision.MultiProcessor
 import com.google.android.gms.vision.text.TextBlock
 import com.google.android.gms.vision.text.TextRecognizer
 import com.orhanobut.logger.Logger
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.toast
+import java.util.regex.Pattern
 import kotlin.properties.Delegates
 
 /**
@@ -34,12 +35,31 @@ class MainActivity : AppCompatActivity() {
     private var textRecognizer by Delegates.notNull<TextRecognizer>()
 
     private val PERMISSION_REQUEST_CAMERA = 100
+    private var idNumber = ""
+    private var name = ""
+    private var hasValidID = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         startCameraSource()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        ivRetry.setOnClickListener {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                requestForPermission()
+            } else {
+                tv_result.visibility = View.GONE
+                ivRetry.visibility = View.GONE
+                hasValidID = false
+                idNumber = ""
+                name = ""
+                mCameraSource.start(surface_camera_preview.holder)
+            }
+        }
     }
 
     private fun startCameraSource() {
@@ -92,22 +112,80 @@ class MainActivity : AppCompatActivity() {
 
                 if (items.size() <= 0) {
                     return
-                }
+                } else {
+                    runOnUiThread {
+                        val stringBuilder = StringBuilder()
+                        for (i in 0 until items.size()) {
+                            val item = items.valueAt(i).value
+                            stringBuilder.append(item)
+                            stringBuilder.append("\n")
 
-                tv_result.post {
-                    val stringBuilder = StringBuilder()
-                    for (i in 0 until items.size()) {
-                        val item = items.valueAt(i)
-                        stringBuilder.append(item.value)
-                        stringBuilder.append("\n")
+                            if (Pattern.matches(
+                                            "([0-9]{3})*-([0-9]{4})*-([0-9]{7})*-([0-9])",
+                                            item
+                                    )
+                            ) {
+                                hasValidID = true
+                                idNumber = item
+                                println("idNumber $idNumber")
+                            }
+                            if (item.contains("Name", true))
+                                name = item
+                        }
+                        if (hasValidID) {
+                            mCameraSource.stop()
+                            tv_result.visibility = View.VISIBLE
+                            ivRetry.visibility = View.VISIBLE
+                            ivDone.visibility = View.VISIBLE
+                            tv_result.text = "ID: $idNumber \n $name"
+                        }
                     }
-                    tv_result.text = stringBuilder.toString()
+                    /*if (items.size() > 3) {
+                        if (checkValidNumberRead(StringBuilder().append(items.valueAt(3).value).toString())) {
+                            runOnUiThread {
+                                tv_result.visibility = View.VISIBLE
+                                ivRetry.visibility = View.VISIBLE
+                                ivDone.visibility = View.VISIBLE
+                                tv_result.post {
+                                    val stringBuilder = StringBuilder()
+                                    for (i in 0 until items.size()) {
+                                        val item = items.valueAt(i)
+                                        stringBuilder.append(item.value)
+                                        stringBuilder.append("\n")
+                                    }
+                                    tv_result.text = stringBuilder.toString()
+                                    mCameraSource.stop()
+                                }
+                            }
+                        } else println("Hiii Error 4: invalid ID $items")
+                    } else println("Hiii Error 5: length should be greater than 3 ${items.size()}")*/
                 }
             }
         })
     }
 
-    fun isCameraPermissionGranted(): Boolean {
+    private fun checkValidNumberRead(readString: String?): Boolean {
+        return when {
+            readString.isNullOrEmpty() -> {
+                println("Hiii Error 1: String shouldn't be empty $readString")
+                false
+            }
+            readString!!.length < 18 -> {
+                println("Hiii Error 2: Id should be greater than 18 $readString")
+                false
+            }
+            !Pattern.matches("([0-9]{3})*-([0-9]{4})*-([0-7]{7})*-[0-9]", readString) -> {
+                println("Hiii Error 3: Id format invalid $readString")
+                false
+            }
+            else -> {
+                println("Hiii Success $readString")
+                true
+            }
+        }
+    }
+
+    private fun isCameraPermissionGranted(): Boolean {
         return ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) ==
                 PackageManager.PERMISSION_GRANTED
     }
