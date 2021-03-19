@@ -56,7 +56,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginHorizontal="30dp"
         android:layout_marginTop="100dp"
-        android:background="@drawable/border_background" />
+        android:background="@drawable/camera_view_background" />
 
     <TextView
         android:id="@+id/tv_add_id_card"

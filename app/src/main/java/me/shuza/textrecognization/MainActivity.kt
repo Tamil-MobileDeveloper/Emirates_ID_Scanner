@@ -141,8 +141,10 @@ class MainActivity : AppCompatActivity() {
 //                            ivDone.visibility = View.VISIBLE
 //                            tv_result.text = "ID: $idNumber \n $name"
                             progress.visibility = View.VISIBLE
+                            viewCameraShape.isSelected = true
                             Handler().postDelayed(Runnable {
                                 progress.visibility = View.GONE
+                                viewCameraShape.isSelected = false
                                 startActivity(
                                         Intent(
                                                 this@MainActivity,

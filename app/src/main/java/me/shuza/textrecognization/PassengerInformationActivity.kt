@@ -56,7 +56,6 @@ class PassengerInformationActivity : AppCompatActivity() {
                 this,
                 message,
                 Toast.LENGTH_LONG
-        )
-                .show()
+        ).show()
     }
 }
