@@ -131,7 +131,7 @@ class MainActivity : AppCompatActivity() {
                             println("idNumber $idNumber")
                         }
                         if (item.contains("Name", true))
-                            name = item
+                            name = item.replace("Name:", "");
                     }
                     if (hasValidID) {
                         runOnUiThread {
