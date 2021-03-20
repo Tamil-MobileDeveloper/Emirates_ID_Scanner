@@ -162,8 +162,8 @@ class MainActivity : AppCompatActivity() {
                                 progress.visibility = View.VISIBLE
                                 viewCameraShape.isSelected = true
                                 val byteArrayOutputStream = ByteArrayOutputStream()
-                                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream)
-                                val path: String = MediaStore.Images.Media.insertImage(contentResolver, bitmap, "Title", null)
+                                bitmapPicture.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream)
+                                val path: String = MediaStore.Images.Media.insertImage(contentResolver, bitmapPicture, "Title", null)
                                 val uri = Uri.parse(path)
 
                                 Handler().postDelayed(Runnable {
