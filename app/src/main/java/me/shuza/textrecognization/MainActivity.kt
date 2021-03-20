@@ -2,12 +2,14 @@ package me.shuza.textrecognization
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Matrix
 import android.os.Bundle
-import android.os.Handler
 import android.support.v4.app.ActivityCompat
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.SurfaceHolder
 import android.view.View
 import com.google.android.gms.vision.CameraSource
@@ -19,6 +21,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.toast
 import java.util.regex.Pattern
 import kotlin.properties.Delegates
+
 
 /**
  *
@@ -65,7 +68,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun startCameraSource() {
-
+        ivScannedImage.visibility = View.GONE
         //  Create text Recognizer
         textRecognizer = TextRecognizer.Builder(this).build()
 
@@ -134,12 +137,32 @@ class MainActivity : AppCompatActivity() {
                             name = item.replace("Name:", "");
                     }
                     if (hasValidID) {
-                        runOnUiThread {
+
+                        mCameraSource.takePicture(null, { bytes ->
+                            runOnUiThread {
+                                val bitmapPicture: Bitmap
+                                ivScannedImage.visibility = View.VISIBLE
+
+                                val orientation = Exif.getOrientation(bytes)
+                                val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+                                bitmapPicture = when (orientation) {
+                                    90 -> rotateImage(bitmap, 90f);
+
+                                    180 ->
+                                        rotateImage(bitmap, 180f)
+                                    270 ->
+                                        rotateImage(bitmap, 270f)
+                                    else -> bitmap
+                                }
+
+//                                val bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+                                Log.d("BITMAP", bitmapPicture.width.toString() + "x" + bitmapPicture.height)
+                                ivScannedImage.setImageBitmap(bitmapPicture)
+                                mCameraSource.stop()
+                            }
+                        })
+                        /*runOnUiThread {
                             mCameraSource.stop()
-//                            tv_result.visibility = View.VISIBLE
-//                            ivRetry.visibility = View.VISIBLE
-//                            ivDone.visibility = View.VISIBLE
-//                            tv_result.text = "ID: $idNumber \n $name"
                             progress.visibility = View.VISIBLE
                             viewCameraShape.isSelected = true
                             Handler().postDelayed(Runnable {
@@ -157,16 +180,22 @@ class MainActivity : AppCompatActivity() {
                                         }
                                 )
                             }, 2000)
-
-
-                        }
+                        }*/
                     }
                 }
             }
         })
     }
 
+    fun rotateImage(source: Bitmap, angle: Float): Bitmap {
+        val matrix = Matrix()
+        matrix.postRotate(angle)
+        return Bitmap.createBitmap(source, 0, 0, source.width, source.height, matrix,
+                true)
+    }
+
     private fun checkValidNumberRead(readString: String?): Boolean {
+
         return when {
             readString.isNullOrEmpty() -> {
                 println("Hiii Error 1: String shouldn't be empty $readString")
