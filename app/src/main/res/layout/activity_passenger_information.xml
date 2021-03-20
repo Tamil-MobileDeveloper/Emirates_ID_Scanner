@@ -80,6 +80,26 @@
         android:textSize="16sp"
         tools:ignore="LabelFor" />
 
+    <TextView
+        android:id="@+id/tv_scanned_image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/edit_ph_number"
+        android:background="@color/lightGrey"
+        android:padding="15dp"
+        android:text="@string/scannedImage"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <ImageView
+        android:id="@+id/iv_id"
+        android:layout_width="320dp"
+        android:layout_height="200dp"
+        android:layout_below="@id/tv_scanned_image"
+        android:layout_centerInParent="true"
+        android:contentDescription="@string/scannedImage" />
+
     <Button
         android:id="@+id/btnSaveAndContinue"
         android:layout_width="match_parent"

@@ -9,4 +9,5 @@
     <string name="save_and_continue">save &amp; continue</string>
     <string name="passenger_information">Passenger Information</string>
     <string name="enter_ph_no">Enter Passenger Phone Number</string>
+    <string name="scannedImage">Scanned Image</string>
 </resources>
