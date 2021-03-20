@@ -93,11 +93,13 @@
         android:textStyle="bold" />
 
     <ImageView
-        android:id="@+id/iv_id"
-        android:layout_width="320dp"
-        android:layout_height="200dp"
+        android:id="@+id/iv_scanned_image"
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
         android:layout_below="@id/tv_scanned_image"
         android:layout_centerInParent="true"
+        android:scaleType="fitXY"
+        android:layout_marginHorizontal="50dp"
         android:contentDescription="@string/scannedImage" />
 
     <Button

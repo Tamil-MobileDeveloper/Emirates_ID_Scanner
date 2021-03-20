@@ -2,11 +2,15 @@ package me.shuza.textrecognization
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
+import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.provider.MediaStore
 import android.support.v4.app.ActivityCompat
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
@@ -19,6 +23,7 @@ import com.google.android.gms.vision.text.TextRecognizer
 import com.orhanobut.logger.Logger
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.toast
+import java.io.ByteArrayOutputStream
 import java.util.regex.Pattern
 import kotlin.properties.Delegates
 
@@ -68,7 +73,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun startCameraSource() {
-        ivScannedImage.visibility = View.GONE
         //  Create text Recognizer
         textRecognizer = TextRecognizer.Builder(this).build()
 
@@ -134,19 +138,17 @@ class MainActivity : AppCompatActivity() {
                             println("idNumber $idNumber")
                         }
                         if (item.contains("Name", true))
-                            name = item.replace("Name:", "");
+                            name = item.replace("Name:", "")
                     }
                     if (hasValidID) {
 
                         mCameraSource.takePicture(null, { bytes ->
                             runOnUiThread {
                                 val bitmapPicture: Bitmap
-                                ivScannedImage.visibility = View.VISIBLE
-
                                 val orientation = Exif.getOrientation(bytes)
                                 val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
                                 bitmapPicture = when (orientation) {
-                                    90 -> rotateImage(bitmap, 90f);
+                                    90 -> rotateImage(bitmap, 90f)
 
                                     180 ->
                                         rotateImage(bitmap, 180f)
@@ -154,11 +156,32 @@ class MainActivity : AppCompatActivity() {
                                         rotateImage(bitmap, 270f)
                                     else -> bitmap
                                 }
-
-//                                val bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
                                 Log.d("BITMAP", bitmapPicture.width.toString() + "x" + bitmapPicture.height)
-                                ivScannedImage.setImageBitmap(bitmapPicture)
                                 mCameraSource.stop()
+
+                                progress.visibility = View.VISIBLE
+                                viewCameraShape.isSelected = true
+                                val byteArrayOutputStream = ByteArrayOutputStream()
+                                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream)
+                                val path: String = MediaStore.Images.Media.insertImage(contentResolver, bitmap, "Title", null)
+                                val uri = Uri.parse(path)
+
+                                Handler().postDelayed(Runnable {
+                                    progress.visibility = View.GONE
+                                    viewCameraShape.isSelected = false
+                                    startActivity(
+                                            Intent(
+                                                    this@MainActivity,
+                                                    PassengerInformationActivity::class.java
+                                            ).apply {
+                                                putExtras(Bundle().apply {
+                                                    putString(ARG_ID_NUMBER, idNumber)
+                                                    putString(ARG_NAME, name)
+                                                    putString(ARG_IMAGE, uri.toString())
+                                                })
+                                            }
+                                    )
+                                }, 2000)
                             }
                         })
                         /*runOnUiThread {

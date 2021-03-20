@@ -57,14 +57,14 @@
         android:visibility="gone"
         tools:visibility="visible" />
 
-    <android.support.v7.widget.AppCompatImageView
-        android:id="@+id/ivScannedImage"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
-        android:layout_marginHorizontal="30dp"
-        android:layout_marginTop="100dp"
-        android:layout_marginBottom="100dp"
-        android:visibility="gone"
-        android:background="@color/colorPrimary"/>
+    <!--    <android.support.v7.widget.AppCompatImageView-->
+    <!--        android:id="@+id/ivScannedImage"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="match_parent"-->
+    <!--        android:layout_alignParentTop="true"-->
+    <!--        android:layout_marginHorizontal="30dp"-->
+    <!--        android:layout_marginTop="100dp"-->
+    <!--        android:layout_marginBottom="100dp"-->
+    <!--        android:background="@color/colorPrimary"-->
+    <!--        android:visibility="gone" />-->
 </RelativeLayout>
